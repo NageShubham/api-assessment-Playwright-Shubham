@@ -1,0 +1,51 @@
+name: Playwright API Tests
+
+on:
+  push:
+    branches: [ main ]
+
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  playwright-api-tests:
+    name: Playwright API Tests (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [reqres-api, fakestore-api]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: playwright-tests/package-lock.json
+
+      - name: Install dependencies
+        run: cd playwright-tests && npm ci
+
+      - name: Install Playwright Browsers
+        run: cd playwright-tests && npx playwright install --with-deps
+
+      - name: Run Playwright tests (${{ matrix.project }})
+        run: cd playwright-tests && npx playwright test --project=${{ matrix.project }}
+        env:
+          CI: true
+          BASE_URL: https://reqres.in
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.project }}-${{ github.run_number }}
+          path: playwright-tests/playwright-report/
+          retention-days: 14
