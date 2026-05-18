@@ -28,16 +28,15 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: playwright-tests/package-lock.json
 
       - name: Install dependencies
-        run: cd playwright-tests && npm ci
+        run: npm ci
 
       - name: Install Playwright Browsers
-        run: cd playwright-tests && npx playwright install --with-deps
+        run: npx playwright install --with-deps
 
       - name: Run Playwright tests (${{ matrix.project }})
-        run: cd playwright-tests && npx playwright test --project=${{ matrix.project }}
+        run: npx playwright test --project=${{ matrix.project }}
         env:
           CI: true
           BASE_URL: https://reqres.in
@@ -47,5 +46,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-${{ matrix.project }}-${{ github.run_number }}
-          path: playwright-tests/playwright-report/
+          path: playwright-report/
           retention-days: 14
