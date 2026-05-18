@@ -13,5 +13,16 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NageShubham/api-assessment-Playwright-Shubham.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NageShubham/api-assessment-Playwright-Shubham/issues"
+  },
+  "homepage": "https://github.com/NageShubham/api-assessment-Playwright-Shubham#readme"
 }
