@@ -1,42 +1,86 @@
 import { defineConfig } from '@playwright/test';
-import dotenv from 'dotenv';
 
+import  dotenv from 'dotenv';
 dotenv.config();
 
+
 export default defineConfig({
-  testDir: './tests',
-  testMatch: '**/*.spec.ts',
-  timeout: 20_000,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : 1,
-  reporter: [
-    ['list'],
-    ['html', { open: 'never' }],
-    ['json', { outputFile: 'test-results/results.json' }],
-  ],
+
+  testDir: './tests/specs',
+
+  fullyParallel: true,
+
+  // Global base URL
   use: {
-    baseURL: process.env.BASE_URL || 'https://reqres.in',
+    baseURL: 'https://dummyjson.com',
+
     extraHTTPHeaders: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'x-api-key': 'pro_d531b57cd621c0b71925c2298af8fc3de6636c798056364f53034171161a02ef',
-      'x-requested-Env': 'production'
-    },
+      Accept: 'application/json'
+    }
   },
-  projects: [
-    {
-      name: 'reqres-api',
-      testMatch: '**/reqres*.spec.ts',
-      use: { baseURL: process.env.BASE_URL || 'https://reqres.in' },
-    },
-    {
-      name: 'fakestore-api',
-      testMatch: '**/store*.spec.ts',
-      use: { baseURL: 'https://fakestoreapi.com' },
-    },
-    {
-    name: 'data-driven',
-    testMatch: '**/dataDriven.spec.ts',
-  },
+
+  // CI-aware retry configuration
+  retries: process.env.CI ? 3 : 0,
+
+  // CI-aware workers
+  workers: process.env.CI ? 3 : 2,
+
+  timeout: 60000,
+
+  // Required reporters
+  reporter: [
+
+    ['list'],
+
+    [
+      'html',
+      {
+        open: 'never'
+      }
+    ],
+
+    [
+      'json',
+      {
+        outputFile: 'results/results.json'
+      }
+    ]
   ],
+
+  // 3 named projects
+  projects: [
+
+    // Project 1
+    {
+      name: 'dummyjson-project',
+
+      testMatch: '**/auth-chain.spec.ts',
+
+      use: {
+        baseURL: 'https://dummyjson.com'
+      }
+    },
+
+    // Project 2
+    {
+      name: 'data-project',
+
+      testMatch: '**/data-brutal.spec.ts',
+
+      use: {
+        baseURL: 'https://dummyjson.com'
+      }
+    },
+
+    // Project 3
+    {
+      name: 'chain-project',
+
+      testMatch: '**/multi-api-chain.spec.ts',
+
+      use: {
+        baseURL: 'https://jsonplaceholder.typicode.com'
+      }
+    }
+  ]
 });

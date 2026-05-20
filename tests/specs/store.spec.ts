@@ -49,8 +49,6 @@ test('Test 1:GET /products returns 20 products with valid schema', async ({ requ
 
 });
 
-
-
 test('Test 2:GET /products/categories returns exact 4 categories', async ({ request }) => {
 
   const res = await request.get('https://fakestoreapi.com/products/categories');
