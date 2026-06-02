@@ -15,7 +15,7 @@ test.describe('AUTH CHAIN — JWT + Security + HTTPBin + Refresh', () => {
       Math.floor(Date.now() / 1000)
     );
   });
-
+  
   // (B) DummyJSON /auth/me
   test('Bearer token accepted by DummyJSON /auth/me', async ({ request, djToken }) => {
 

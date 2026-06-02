@@ -11,6 +11,7 @@ export const test = base.extend<Fixtures>({
 
   // 1) DummyJSON token fixture
   djToken: async ({ request }, use) => {
+    
 
     const response = await request.post('https://dummyjson.com/auth/login', {
       data: {
